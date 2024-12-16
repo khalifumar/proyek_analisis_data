@@ -6,19 +6,19 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 
 rcParams.update({'font.size': 12, 'axes.titlesize': 14, 'axes.labelsize': 12})
+sns.set_palette("Set2")
 
-sns.set_palette("Set2")  # Pilih palet warna yang lebih lembut dan kontras
-
-plt.xticks(rotation=45)  # Rotasi label X agar tidak tumpang tindih
+# Rotasi label X agar tidak tumpang tindih
+plt.xticks(rotation=45)
 
 
 # Fungsi untuk memuat data
 def load_data():
-    # Load hour.csv
+    # Data hour.csv
     hour_df = pd.read_csv("hour.csv")
     hour_df['dteday'] = pd.to_datetime(hour_df['dteday'])
 
-    # Load day.csv
+    # Data day.csv
     day_df = pd.read_csv("day.csv")
     day_df['dteday'] = pd.to_datetime(day_df['dteday'])
 
@@ -34,7 +34,7 @@ def load_data():
 
     return hour_df, day_df
 
-# Memuat data
+# Memuat kedua data
 hour_df, day_df = load_data()
 
 # Bagian Dashboard
@@ -74,7 +74,7 @@ filtered_data = df[
     (df['weathersit'].isin(weather_filter))
 ]
 
-# Tampilkan data yang difilter
+# Menampilkan data yang difilter
 st.markdown("### Data yang Difilter")
 st.dataframe(filtered_data)
 
@@ -85,12 +85,13 @@ st.write(filtered_data.describe())
 
 
 
-# Visualisasi 1: Tren Penggunaan Sepeda Berdasarkan Musim
-tab1, tab2 = st.tabs(["Visualisas", "Keterangan"])
+# Visualisasi Tren Penggunaan Sepeda Berdasarkan Musim
+st.markdown("### Tren Penggunaan Sepeda Berdasarkan Musim")
 
+tab1, tab2 = st.tabs(["Visualisas", "Keterangan"])
 with tab1:
-    st.markdown("### Tren Penggunaan Sepeda Berdasarkan Musim")
-    plt.figure(figsize=(14, 7))  # Ukuran grafik yang lebih besar
+    st.markdown("##### Tren Penggunaan Sepeda Berdasarkan Musim")
+    plt.figure(figsize=(14, 7))
     sns.set(style="whitegrid")
     line_plot = sns.lineplot(data=filtered_data, x='dteday', y='cnt', hue='season', palette='Set2', linewidth=2)
     line_plot.set_title("Tren Penggunaan Sepeda Berdasarkan Musim", fontsize=16)
@@ -100,7 +101,7 @@ with tab1:
     st.pyplot(plt)
 
 with tab2:
-    st.markdown("**Keterangan:**")
+    st.markdown("##### Keterangan")
     
     col1, col2 = st.columns(2)
 
@@ -136,12 +137,13 @@ with tab2:
             st.write("Data yang ditampilkan menunjukkan penggunaan sepeda pada kondisi badai. Biasanya, penggunaan sepeda sangat menurun dalam kondisi badai.")
 
 
-# Visualisasi 2: Distribusi Penggunaan Sepeda Berdasarkan Cuaca
-tab3, tab4 = st.tabs(["Visualisasi", "Keterangan"])
+# Visualisasi Distribusi Penggunaan Sepeda Berdasarkan Cuaca
+st.markdown("### Distribusi Penggunaan Sepeda Berdasarkan Cuaca")
 
+tab3, tab4 = st.tabs(["Visualisasi", "Keterangan"])
 with tab3:
-    st.markdown("### Distribusi Penggunaan Sepeda Berdasarkan Cuaca")
-    plt.figure(figsize=(14, 7))  # Ukuran grafik yang lebih besar
+    st.markdown("##### Visualisasi")
+    plt.figure(figsize=(14, 7))
     sns.set(style="whitegrid")
     box_plot = sns.boxplot(x='weathersit', y='cnt', data=filtered_data, palette='Set2', linewidth=1.5)
     box_plot.set_title("Distribusi Penggunaan Sepeda Berdasarkan Cuaca", fontsize=16)
@@ -150,7 +152,7 @@ with tab3:
     st.pyplot(plt)
 
 with tab4:
-    st.markdown("**Keterangan:**")
+    st.markdown("##### Keterangan")
 
     # Menyesuaikan keterangan berdasarkan dataset dan filter
     if dataset_choice == "Per Jam (hour.csv)":
@@ -159,12 +161,13 @@ with tab4:
         st.write("Grafik ini menunjukkan distribusi penggunaan sepeda berdasarkan kondisi cuaca pada dataset per hari. Penggunaan sepeda biasanya berkurang saat cuaca buruk.")
 
 
-# Visualisasi 3: Tren Penggunaan Sepeda Berdasarkan Hari Minggu (Khusus day.csv)
+# Visualisasi Tren Penggunaan Sepeda Berdasarkan Hari Minggu (Khusus day.csv)
 if dataset_choice == "Per Hari (day.csv)":  # Hanya tampilkan tab ini untuk 'day.csv'
-    tab5, tab6 = st.tabs(["Visualisasi", "Penjelasan"])
+    st.markdown("### Tren Penggunaan Sepeda Berdasarkan Hari Minggu")
 
+    tab5, tab6 = st.tabs(["Visualisasi", "Penjelasan"])
     with tab5:
-        st.markdown("### Tren Penggunaan Sepeda Berdasarkan Hari Minggu")
+        st.markdown("##### Visualisasi")
         plt.figure(figsize=(10, 5))
         sns.barplot(x='weekday', y='cnt', data=filtered_data, ci=None)
         plt.title("Penggunaan Sepeda Berdasarkan Hari Minggu")
@@ -173,10 +176,6 @@ if dataset_choice == "Per Hari (day.csv)":  # Hanya tampilkan tab ini untuk 'day
         st.pyplot(plt)
 
     with tab6:
-        st.markdown("**Keterangan**")
+        st.markdown("##### Keterangan")
         st.write("Pada visualisasi ini, kita dapat melihat distribusi penggunaan sepeda berdasarkan hari dalam seminggu. Berdasarkan data, dapat terlihat apakah penggunaan sepeda lebih tinggi pada hari kerja atau akhir pekan.")
         st.write("Jika Anda melihat penggunaan yang lebih tinggi pada akhir pekan, ini bisa jadi karena orang lebih cenderung menggunakan sepeda untuk rekreasi atau olahraga pada hari libur.")
-
-
-# Visualisasi 4: Tren Penggunaan Sepeda saat Cuaca Tidak Stabil
-
