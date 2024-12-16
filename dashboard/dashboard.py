@@ -15,11 +15,11 @@ plt.xticks(rotation=45)
 # Fungsi untuk memuat data
 def load_data():
     # Data hour.csv
-    hour_df = pd.read_csv("hour.csv")
+    hour_df = pd.read_csv("/workspaces/proyek_analisis_data/dashboard/hour.csv")
     hour_df['dteday'] = pd.to_datetime(hour_df['dteday'])
 
     # Data day.csv
-    day_df = pd.read_csv("day.csv")
+    day_df = pd.read_csv("/workspaces/proyek_analisis_data/dashboard/day.csv")
     day_df['dteday'] = pd.to_datetime(day_df['dteday'])
 
     # Mapping kolom untuk kedua dataset
