@@ -10,7 +10,7 @@ st.title("Dashboard Analisis Bike Sharing")
 day_df = pd.read_csv("dashboard/day.csv", delimiter=",")
 hour_df = pd.read_csv("dashboard/hour.csv", delimiter=",")
 
-# Sidebar untuk memilih dataset
+# Sidebar
 dataset_option = st.sidebar.selectbox("Pilih Dataset:", ["Day", "Hour"])
 
 if dataset_option == "Day":
@@ -69,7 +69,7 @@ with col1:
     fig, ax = plt.subplots(figsize=(8, 4))
     weather_trend.plot(kind='bar', ax=ax, color='skyblue')
     ax.set_title("Rata-rata Penyewaan Berdasarkan Kondisi Cuaca")
-    ax.set_ylabel("Jumlah Penyewaan")
+    ax.set_ylabel("Jumlah Pengguna Sepeda")
     ax.set_xlabel("Kondisi Cuaca")
     st.pyplot(fig)
 
@@ -122,7 +122,6 @@ st.header("Tren Penggunaan Sepeda")
 col5, col6 = st.columns(2)
 with col5:
     # Analisis Cuaca Tidak Stabil
-
     unstable_weather_df = df[df['weathersit'].isin(["Mendung", "Hujan", "Badai"])]
 
     monthly_trend = unstable_weather_df.groupby(['yr', 'mnth'])['cnt'].sum().reset_index()
