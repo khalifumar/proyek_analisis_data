@@ -50,9 +50,11 @@ dataset_option = st.sidebar.selectbox("Pilih Dataset:", ["Day", "Hour", "Other"]
 if dataset_option == "Day":
     st.subheader("Dataset day.csv")
     df = day_df
-else:
+elif dataset_option == "Hour":
     st.subheader("Dataset hour.csv")
     df = hour_df
+else:
+    st.subheader("")
 
 if dataset_option == "Day":
     # Menampilkan seluruh data dari day_df dan hour_df
