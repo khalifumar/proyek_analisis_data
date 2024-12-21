@@ -7,8 +7,8 @@ st.set_page_config(layout="wide")
 st.title("Dashboard Analisis Bike Sharing")
 
 # Mengambil Data
-day_df = pd.read_csv("day.csv", delimiter=",")
-hour_df = pd.read_csv("hour.csv", delimiter=",")
+day_df = pd.read_csv("dashboard/day.csv", delimiter=",")
+hour_df = pd.read_csv("dashboard/hour.csv", delimiter=",")
 
 # Mapping Season
 season_mapping = {1: "Musim Semi", 2: "Musim Panas", 3: "Musim Gugur", 4: "Musim Dingin"}
