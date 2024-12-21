@@ -260,11 +260,67 @@ if dataset_option == "Day":
 
         with st.expander('Penjelasan'):
             st.markdown("""
-                    Berdasarkan data di bulan Juli, Agustus, September, Oktober, November, dan Desember terakhir, pengguna sepeda di tahun 
-                    2012 berjalan secara stabil dan meningkat. Dari sini dapat dilihat bahwa pada bulan-bulan tersebut, jumlah peminjaman sepeda 
-                    berjalan secara konstan dan terus dan terus menurun.
+                    Berdasarkan line chart diatas, Didapatkan insight baru mengenai pola jumlah penggunaan sepeda di 6 bulan terakhir. Ini menjawab pertanyaan nomor 2 tentang apakah bersepeda masih mengalami trending? 
             """)
-    
+
+    with col10:
+        st.subheader("Barchart Jumlah Pengguna Perbulan Berdasarkan Cuaca")
+
+        # Menambahkan kolom bulan ke filtered_data
+        day_df['mnth'] = day_df['dteday'].dt.month
+
+        # Menghitung jumlah pengguna berdasarkan bulan dan cuaca
+        weatherPerDay_user_count = day_df.groupby(['mnth', 'weathersit'])['cnt'].sum().reset_index()
+
+        # Membuat figure dan axes untuk plot pertama
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.barplot(data=weatherPerDay_user_count, x='mnth', y='cnt', hue='weathersit', ax=ax, palette='Set2')
+
+        ax.set_title('Jumlah Pengguna Sepeda di 6 Bulan Terakhir Berdasarkan Cuaca', fontsize=16)
+        ax.set_xlabel('Bulan', fontsize=12)
+        ax.set_ylabel('Jumlah Pengguna Sepeda', fontsize=12)
+
+        # Menampilkan plot pertama di Streamlit
+        st.pyplot(fig)
+
+        with st.expander('Penjelasan'):
+            st.markdown("""
+                    Berdasarkan bar chart diatas, Didapatkan insight baru mengenai pertanyaan nomor 1 tentang performa pengguna sepeda berdasarkan 3 kondisi. Kalau dilihat di bar chart tersebut, cuaca yang paling sering terjadi yaitu cuaca cerah. dan yang paling jarang terjadi yaitu cuaca Badai.    
+                """)
+        
+        df = pd.DataFrame(day_df)
+
+    col10a, col10b = st.columns(2)
+    with col10a:
+        # Tabel RFM Untuk Analisa Registrasi
+        df['dteday'] = pd.to_datetime(df['dteday'])
+
+        # Recency: Tanggal terakhir registrasi per pengguna
+        rfm_recency = df.groupby('id_pengguna')['dteday'].max()
+
+        # Frequency: Jumlah registrasi berdasarkan tanggal per pengguna
+        rfm_frequency = df.groupby(['id_pengguna', 'dteday'])['registered'].sum().reset_index()
+        rfm_frequency = rfm_frequency.groupby('id_pengguna')['registered'].sum()
+
+        # Monetary: Total revenue (cnt) per pengguna
+        rfm_monetary = df.groupby('id_pengguna')['cnt'].sum()
+        rfm_table = pd.DataFrame({
+            'Recency (Tanggal Terakhir Registrasi)': rfm_recency,
+            'Frequency (Total Registrasi)': rfm_frequency,
+            'Monetary (Total Revenue)': rfm_monetary
+        }).reset_index()
+
+        st.subheader("Analisis RFM Pengguna Sepeda")
+        st.dataframe(rfm_table)
+
+    with col10b:
+        st.subheader('Penjelasan RFM')
+        st.markdown("""
+            - Recency : Menampilkan tabel registrasi terakhir berdasarkan tanggal dan Id pengguna
+            - Frecuency : Menampilkan tabel total registrasi berdasarkan tanngal dan id pengguna
+            - Monetary : Menampilkan tabel revenue dari pengguna sepeda
+            """)
+
     st.header("Kesimpulan Data")
     col11, col12 = st.columns(2)
     with col11:
